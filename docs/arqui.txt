@@ -1,0 +1,129 @@
+T1.3 ARQUITECTURA BASE
+======================
+
+1. RESUMEN DE LA SOLUCIÓN
+-------------------------
+El proyecto “P05 – Gestión de encomiendas en edificios” se divide en tres componentes principales:
+
+- Un Backend con Node.js (JavaScript) que expone una API REST y gestiona la lógica de negocio.
+- Un Frontend con React, desarrollado como SPA (Single Page Application).
+- Una Base de datos MySQL para almacenar la información de usuarios, departamentos y encomiendas.
+
+Este sistema permitirá:
+- Registrar paquetes recibidos en el edificio.
+- Notificar al destinatario correspondiente.
+- Llevar un registro del estado de cada encomienda (pendiente, retirada, etc.).
+- Administrar esta información a través de un panel para el personal de conserjería o para los residentes.
+
+2. DIAGRAMA GENERAL DE LA ARQUITECTURA
+--------------------------------------
+Se maneja una arquitectura cliente-servidor en la que:
+1. El Frontend (React) consume la API que provee el Backend (Node.js) mediante solicitudes HTTP (REST).
+2. El Backend procesa las peticiones, aplica la lógica de negocio y se comunica con la base de datos.
+3. La Base de datos MySQL guarda y recupera la información necesaria (usuarios, encomiendas, etc.).
+
+3. DETALLES DE LA ARQUITECTURA
+------------------------------
+
+3.1 BACKEND
+-----------
+- Tecnología principal: Node.js (versión LTS preferible).
+- Framework web sugerido: Express (para exponer endpoints REST).
+- Método de acceso a MySQL: Puede usarse un ORM (ej. Sequelize) o consultas directas.
+- Estructura típica de carpetas:
+  - Un archivo principal de arranque (por ejemplo “app.js” o “index.js”).
+  - Directorios para controladores, servicios, modelos y rutas, promoviendo la separación de responsabilidades.
+- Funciones principales:
+  - Exponer endpoints REST para el manejo de usuarios, departamentos y encomiendas.
+  - Procesar la lógica de negocio (validar datos, gestionar reglas para el retiro de paquetes).
+  - Interactuar con la base de datos para operaciones de lectura/escritura.
+
+3.2 FRONTEND
+------------
+- Tecnología principal: React (SPA).
+- Librería de rutas recomendada: React Router para la navegación entre páginas.
+- Módulo de comunicación con la API: Librerías como Axios para gestionar peticiones HTTP.
+- Estructura de directorios:
+  - “src” con subcarpetas para componentes, páginas, servicios de conexión a la API, etc.
+  - Páginas o vistas para diferentes secciones (registro de encomiendas, dashboard para conserjes, historial de retiros, etc.).
+- Funciones principales:
+  - Ofrecer una interfaz intuitiva para el usuario final (conserje o residente).
+  - Realizar solicitudes al backend y mostrar resultados (encomiendas pendientes, etc.).
+  - Manejar flujos de validación o ingreso (por ejemplo, autenticación).
+
+3.3 BASE DE DATOS (MYSQL)
+-------------------------
+- Motor de base de datos: MySQL (versión 8.x recomendada).
+- Posible diseño de tablas:
+  1) usuarios
+     - Identificador (PK)
+     - Nombre
+     - Email
+     - Contraseña (cifrada)
+     - Rol (residente, conserje, etc.)
+  2) departamentos (opcional, si se maneja en detalle)
+     - Identificador (PK)
+     - Número y piso
+     - Referencia a un usuario responsable
+  3) encomiendas
+     - Identificador (PK)
+     - Departamento asociado
+     - Fecha de ingreso
+     - Fecha de retiro (si aplica)
+     - Estado (pendiente, retirado)
+  4) notificaciones (opcional, para registrar el historial de avisos)
+     - Identificador (PK)
+     - Referencia a la encomienda
+     - Tipo de notificación (email, push, etc.)
+     - Fecha de envío
+
+4. CREACIÓN DE PROYECTOS BASE
+-----------------------------
+
+4.1 PROYECTO BACKEND (NODE.JS)
+------------------------------
+- Inicializar el proyecto con un gestor de dependencias (npm).
+- Instalar librerías mínimas (Express, MySQL o Sequelize, etc.).
+- Crear archivos de configuración para la conexión a la base de datos.
+- Definir la estructura de rutas, controladores, servicios y modelos.
+- Ejecutar y probar que el servidor se inicie correctamente y que se conecte a la base de datos.
+
+4.2 PROYECTO FRONTEND (REACT)
+-----------------------------
+- Crear el proyecto con Create React App o Vite.
+- Estructurar las carpetas (componentes, páginas, servicios).
+- Configurar React Router para las rutas principales (iniciar sesión, dashboard, etc.).
+- Instalar librerías para peticiones HTTP (Axios) y gestionar la comunicación con el backend.
+- Probar la aplicación localmente para verificar la correcta interacción con la API.
+
+5. INTERACCIÓN ENTRE CAPAS
+--------------------------
+1) El usuario accede a la aplicación web desarrollada en React.
+2) React envía peticiones REST al backend (por ejemplo, para consultar encomiendas).
+3) El backend procesa la petición, aplicando la lógica de negocio y accediendo a MySQL para obtener o guardar datos.
+4) El backend responde al cliente (React) con un resultado en formato JSON.
+5) React muestra los datos o actualiza la interfaz en consecuencia.
+
+6. CONSIDERACIONES DE SEGURIDAD
+-------------------------------
+- Autenticación y autorización: uso de JWT o sesiones para controlar el acceso.
+- Roles de usuario: residente, conserje, administrador, con distintas capacidades.
+- Cifrado de contraseñas en la base de datos (por ejemplo, bcrypt).
+- Validación de datos de entrada para prevenir inyección SQL o malas prácticas.
+- Uso de variables de entorno para almacenar credenciales y secretos (no exponer información sensible en el repositorio).
+
+7. PRÓXIMOS PASOS
+-----------------
+- Definir y documentar los endpoints detallados (CRUD de encomiendas, usuarios, etc.).
+- Implementar un sistema de notificaciones (puede ser email o push) al ingresar una encomienda.
+- Integrar funciones de generación/lectura de códigos para el retiro de paquetes.
+- Configurar despliegues en entornos de prueba o producción, asegurando la escalabilidad y mantenibilidad.
+
+8. CONCLUSIONES
+---------------
+La arquitectura base para “P05 – Gestión de encomiendas en edificios” se compone de:
+- Un backend en Node.js que gestiona la lógica y expone servicios REST.
+- Un frontend en React para presentar la interfaz y consumir dichos servicios.
+- Una base de datos MySQL donde se centraliza y asegura la persistencia de la información.
+
+Esta definición sirve como cimiento para que el equipo de desarrollo avance en la implementación de características, pruebas y despliegue del sistema

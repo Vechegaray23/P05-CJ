@@ -1,0 +1,2 @@
+para abrir host local:
+vicenteechegaray@MacBook-Pro-de-Vicente encomiendas % npm run dev
